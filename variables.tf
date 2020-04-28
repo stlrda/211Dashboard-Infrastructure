@@ -45,7 +45,7 @@ variable "private_key_path" {
 }
 
 
-#REDB VARIABLES-----------------------------------------
+#DB VARIABLES-----------------------------------------
 variable "db_name" {
   description = "Name of ETL target database"
   type = string
