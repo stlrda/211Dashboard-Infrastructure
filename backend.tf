@@ -4,8 +4,8 @@
 
 terraform {
   backend "s3" {
-    bucket         = "terraform-211-tfstate"
-    key            = "terraform/terraform.tfstate"
+    bucket         = "stlrda-terraform-tfstates"
+    key            = "uw211dashboard/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform-211-tfstate"
   }

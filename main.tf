@@ -3,7 +3,7 @@
 #Create S3 bucket as ETL processes workspace
 #-------------------------------------------------------------
 resource "aws_s3_bucket" "airflow_workbucket" {
-  bucket = "airflow-workbucket"
+  bucket = "${var.db_name}-workbucket"
   force_destroy = true
   region = var.aws_region
   tags = var.tags
@@ -12,8 +12,8 @@ resource "aws_s3_bucket" "airflow_workbucket" {
 #--------------------------------------------------------------
 #Create RDS Database as ETL Target
 #--------------------------------------------------------------
-resource "aws_security_group" "redb_db_security_group" {
-  name = "redb_db_security_group"
+resource "aws_security_group" "db_security_group" {
+  name = "db_security_group"
   description = "Security group for target database"
 //  vpc_id = module.redb-platform.cluster_vpc_id
   tags = var.tags
@@ -63,21 +63,21 @@ resource "aws_security_group" "redb_db_security_group" {
 }
 
 
-resource "aws_db_instance" "airflow_database" {
-  identifier              = "${var.redb_db_name}-db"
-  instance_class          = var.redb_db_instance_type
+resource "aws_db_instance" "db_database" {
+  identifier              = "${var.db_name}-db"
+  instance_class          = var.db_instance_type
   engine                  = "postgres"
   engine_version          = "11.5"
-  name                    = var.redb_db_name
-  username                = var.redb_db_username
-  password                = var.redb_db_password
+  name                    = var.db_name
+  username                = var.db_username
+  password                = var.db_password
   storage_type            = "gp2"
   backup_retention_period = 7
   multi_az                = false
   publicly_accessible     = true
   apply_immediately       = true
   skip_final_snapshot     = true
-  vpc_security_group_ids  = ["${aws_security_group.redb_db_security_group.id}"]
+  vpc_security_group_ids  = ["${aws_security_group.db_security_group.id}"]
   port                    = 5432
 //  db_subnet_group_name    = module.redb-platform.db_subnet_group
   allocated_storage       = 20
